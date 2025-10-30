@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>قرارات تعديل أخصائي التمريض</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Cairo", sans-serif;
+      }
+      .card-content {
+        white-space: pre-line;
+      }
+
+      /* Custom animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(20px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      .fade-in-up {
+        animation: fadeInUp 0.6s ease-out;
+      }
+
+      .fade-in {
+        animation: fadeIn 0.4s ease-out;
+      }
+
+      .slide-in {
+        animation: slideIn 0.5s ease-out;
+      }
+
+      .pulse-hover:hover {
+        animation: pulse 0.3s ease-in-out;
+      }
+
+      /* Smooth transitions for all interactive elements */
+      .transition-all {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      /* Enhanced button hover effects */
+      .btn-primary {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn-primary::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .btn-primary:hover::before {
+        left: 100%;
+      }
+
+      /* Card hover effects */
+      .card-hover {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .card-hover:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+
+      /* Input focus animations */
+      .input-focus {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .input-focus:focus {
+        transform: scale(1.02);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+
+      /* Loading animation */
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Success/Error animations */
+      .alert-enter {
+        animation: slideIn 0.4s ease-out;
+      }
+
+      .result-card {
+        animation: fadeInUp 0.6s ease-out;
+      }
+
+      /* Opinion status styling */
+      .opinion-success {
+        background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+        border-left: 4px solid #10b981;
+        color: #065f46;
+      }
+
+      .opinion-unsuccess {
+        background: linear-gradient(135deg, #fee2e2, #fecaca);
+        border-left: 4px solid #ef4444;
+        color: #991b1b;
+      }
+
+      .opinion-default {
+        background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+        border-left: 4px solid #6b7280;
+        color: #374151;
+      }
+
+      /* Opinion banner styling */
+      .opinion-banner {
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin-bottom: 20px;
+        font-weight: 600;
+        text-align: center;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        animation: fadeInUp 0.5s ease-out;
+        line-height: 1.6;
+        word-wrap: break-word;
+        white-space: pre-line;
+      }
+
+      /* Accordion styling */
+      .accordion-container {
+        margin-bottom: 20px;
+      }
+
+      .accordion-header {
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        color: white;
+        padding: 16px 20px;
+        border-radius: 12px 12px 0 0;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 600;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      .accordion-header:hover {
+        background: linear-gradient(135deg, #2563eb, #1e40af);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1);
+      }
+
+      .accordion-content {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-top: none;
+        border-radius: 0 0 12px 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        max-height: 0;
+        opacity: 0;
+      }
+
+      .accordion-content.active {
+        max-height: none;
+        opacity: 1;
+      }
+
+      .accordion-icon {
+        transition: transform 0.3s ease;
+        font-size: 18px;
+      }
+
+      .accordion-icon.rotated {
+        transform: rotate(180deg);
+      }
+
+      .multiple-results-header {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: white;
+        padding: 16px 20px;
+        border-radius: 12px;
+        margin-bottom: 16px;
+        text-align: center;
+        font-weight: 600;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        animation: fadeInUp 0.5s ease-out;
+      }
+
+      .approval-status-banner {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        padding: 16px 20px;
+        border-radius: 12px;
+        margin-bottom: 16px;
+        text-align: center;
+        font-weight: 600;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        animation: fadeInUp 0.5s ease-out;
+        border: 2px solid #34d399;
+      }
+
+      .banner-success {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+      }
+
+      .banner-danger {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+      }
+
+      .banner-default {
+        background: linear-gradient(135deg, #6b7280, #4b5563);
+        color: white;
+      }
+
+      /* Enhanced beautiful design */
+      .beautiful-gradient {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+
+      .beautiful-card {
+        background: linear-gradient(145deg, #ffffff, #f8fafc);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+      }
+
+      .beautiful-shadow {
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+
+      .beautiful-input {
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+      }
+
+      .beautiful-input:focus {
+        background: rgba(255, 255, 255, 1);
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .beautiful-button {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border: none;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .beautiful-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+      }
+
+      .beautiful-button::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .beautiful-button:hover::before {
+        left: 100%;
+      }
+
+      .beautiful-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .beautiful-header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.1;
+      }
+
+      /* Name banner styling */
+      .name-banner {
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        color: white;
+        padding: 20px 24px;
+        border-radius: 16px;
+        margin-bottom: 24px;
+        text-align: center;
+        box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.3);
+        animation: fadeInUp 0.6s ease-out;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .name-banner::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          45deg,
+          transparent 30%,
+          rgba(255, 255, 255, 0.1) 50%,
+          transparent 70%
+        );
+        animation: shimmer 3s infinite;
+      }
+
+      @keyframes shimmer {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
+
+      .name-banner h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0;
+        position: relative;
+        z-index: 1;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .name-banner .subtitle {
+        font-size: 1rem;
+        opacity: 0.9;
+        margin-top: 8px;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Footer text (at the end of the page only) */
+      .final-credit {
+        text-align: right;
+        padding: 18px 20px;
+        color: rgba(75,85,99,0.9);
+        font-size: 14px;
+        opacity: 0;
+        animation: fadeIn 1s forwards 0.6s;
+      }
+    </style>
+  </head>
+  <body class="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 min-h-screen">
+    <!-- Main Header -->
+    <div class="beautiful-header text-white py-8 shadow-2xl relative">
+      <div class="container mx-auto px-4 text-center relative z-10">
+        <h1 class="text-5xl font-bold mb-4 fade-in-up drop-shadow-lg">تظلم كليات التمريض</h1>
+        <div class="w-24 h-1 bg-white mx-auto rounded-full opacity-80"></div>
+      </div>
+    </div>
+
+    <div class="container mx-auto px-4 py-12">
+      <!-- Search Header -->
+      <div class="text-center mb-12 fade-in-up">
+        <h2 class="text-4xl font-bold text-gray-800 mb-4 transition-all hover:text-indigo-600">نظام البحث بالرقم القومي</h2>
+        <p class="text-gray-600 text-lg transition-all hover:text-gray-800">ابحث عن البيانات باستخدام الرقم القومي</p>
+        <div class="w-16 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full mt-4"></div>
+      </div>
+
+      <!-- Search Form -->
+      <div class="max-w-lg mx-auto mb-12 slide-in">
+        <div class="beautiful-card rounded-2xl beautiful-shadow p-8 card-hover">
+          <div class="mb-4">
+            <label for="nationalId" class="block text-sm font-medium text-gray-700 mb-2 transition-all hover:text-blue-600">الرقم القومي</label>
+            <input type="text" id="nationalId" placeholder="ادخل الرقم القومي" class="w-full px-6 py-4 rounded-xl text-right beautiful-input text-lg font-medium" />
+          </div>
+          <button id="searchBtn" onclick="searchData()" class="w-full beautiful-button text-white py-4 px-6 rounded-xl font-semibold text-lg pulse-hover">
+            <span id="searchText">بحث</span>
+            <span id="searchLoading" class="loading hidden"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Results Container -->
+      <div id="results" class="max-w-4xl mx-auto"></div>
+
+      <!-- final credit (end of page only) -->
+      <div class="final-credit">إعداد أ / محمد يحي</div>
+    </div>
+
+    <script>
+      let data = [];
+
+      // Load data when page loads
+      window.addEventListener("DOMContentLoaded", async () => {
+        try {
+          const response = await fetch("قرار رقم 444 لسنة 2024 (أخصائي تمريض).json");
+          data = await response.json();
+          // If the JSON structure has a top-level object with a key (like in uploaded file), try to normalize it
+          if (!Array.isArray(data)) {
+            // Attempt to find the first array in the object
+            const keys = Object.keys(data);
+            for (const k of keys) {
+              if (Array.isArray(data[k])) {
+                data = data[k];
+                break;
+              }
+            }
+          }
+          console.log("Data loaded successfully:", data.length, "records");
+        } catch (error) {
+          console.error("Error loading data:", error);
+          showError("خطأ في تحميل البيانات. تأكد إن ملف JSON بجانب صفحة HTML بنفس الاسم وبنفس المجلد.");
+        }
+      });
+
+      function searchData() {
+        const nationalId = document.getElementById("nationalId").value.trim();
+        const resultsContainer = document.getElementById("results");
+        const searchBtn = document.getElementById("searchBtn");
+        const searchText = document.getElementById("searchText");
+        const searchLoading = document.getElementById("searchLoading");
+
+        if (!nationalId) {
+          showError("يرجى إدخال الرقم القومي");
+          return;
+        }
+
+        if (data.length === 0) {
+          showError("البيانات لم يتم تحميلها بعد، يرجى المحاولة مرة أخرى");
+          return;
+        }
+
+        // Show loading animation
+        searchBtn.disabled = true;
+        searchText.classList.add("hidden");
+        searchLoading.classList.remove("hidden");
+
+        setTimeout(() => {
+          // Normalize each record: try different possible field names for id, name, etc.
+          const normalized = data.map((row) => {
+            // possible id fields: Column2, id, الرقم_القومي, nationalId
+            const id = row.Column2 || row.id || row["الرقم القومى"] || row["الرقم القومي"] || row["الرقم القومي "];
+            const name = row.Column3 || row.name || row["الاسم"] || row["الاسم "];
+            const current = row.Column4 || row.current || row["جهة التكليف"] || row["جهة التكليف "];
+            const attachments = row.Column5 || row.attachments || row["قرارات التعديل الصادرة"] || row["Column5"];
+            // some files might include committeeResolution or similar in Column8/9
+            const committeeResolution = row.Column8 || row.committeeResolution || row["Column8"] || row["Column9"] || row["ملاحظات"];
+            const opinion = row["opinion "] || row.opinion || row["رأي"] || row["رأي اللجنة"] || row["opinion"];
+            return {
+              id: id ? String(id).trim() : "",
+              name: name ? String(name).trim() : "",
+              current: current ? String(current).trim() : "",
+              requested: "", // not present in this dataset by default
+              attachments: attachments ? String(attachments).trim() : "",
+              committeeResolution: committeeResolution ? String(committeeResolution).trim() : "",
+              "opinion ": opinion ? String(opinion).trim() : ""
+            };
+          });
+
+          // Filter by matching id (exact match or numeric match)
+          const results = normalized.filter(item => item.id === nationalId || item.id === Number(nationalId) || item.id === nationalId.replace(/\s+/g,""));
+
+          if (results.length > 0) {
+            if (results.length === 1) displayResult(results[0]);
+            else displayMultipleResults(results);
+          } else {
+            showError("لم يتم العثور على بيانات للرقم القومي المدخل");
+          }
+
+          // Reset button state
+          searchBtn.disabled = false;
+          searchText.classList.remove("hidden");
+          searchLoading.classList.add("hidden");
+        }, 600);
+      }
+
+      function displayResult(item) {
+        const resultsContainer = document.getElementById("results");
+
+        const formatAttachments = (attachments) => {
+          if (!attachments) return "لا توجد مرفقات";
+          return attachments.split("*").filter(it=>it && it.trim()).map(it=>it.trim()).join("\n• ");
+        };
+
+        const getOpinionClass = (opinion) => {
+          if (!opinion) return "opinion-default";
+          if (opinion.includes("عدم الموافقة")) return "opinion-unsuccess";
+          if (opinion.includes("الموافقة") && !opinion.includes("عدم الموافقة")) return "opinion-success";
+          return "opinion-default";
+        };
+
+        const getOpinionBanner = (opinion) => {
+          if (!opinion) return { class: "banner-default", text: "لا يوجد رأي محدد" };
+          if (opinion.includes("عدم الموافقة")) return { class: "banner-danger", text: `❌ ${opinion}` };
+          if (opinion.includes("الموافقة") && !opinion.includes("عدم الموافقة")) return { class: "banner-success", text: `✅ ${opinion}` };
+          return { class: "banner-default", text: `📋 ${opinion}` };
+        };
+
+        const bannerInfo = getOpinionBanner(item["opinion "]);
+
+        const cardHtml = `
+                <div class="opinion-banner ${bannerInfo.class}">
+                    <div class="text-lg font-bold">${bannerInfo.text}</div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-6 mb-6 result-card card-hover">
+                    <div class="grid gap-4">
+
+                        <div class="border-b pb-4 transition-all hover:bg-gray-50 p-3 rounded-lg">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2 transition-all hover:text-blue-600">الادارة الحالية</h3>
+                            <p class="text-gray-700 card-content transition-all">${item.current || "غير محدد"}</p>
+                        </div>
+
+                        <div class="border-b pb-4 transition-all hover:bg-gray-50 p-3 rounded-lg">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2 transition-all hover:text-blue-600">الادارة المطلوبة</h3>
+                            <p class="text-gray-700 card-content transition-all">${item.requested || "غير محدد"}</p>
+                        </div>
+
+                        <div class="border-b pb-4 transition-all hover:bg-gray-50 p-3 rounded-lg">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2 transition-all hover:text-blue-600">المرفقات</h3>
+                            <p class="text-gray-700 card-content transition-all">• ${formatAttachments(item.attachments)}</p>
+                        </div>
+
+                        <div class="border-b pb-4 transition-all hover:bg-gray-50 p-3 rounded-lg ${getOpinionClass(item["opinion "])}">
+                            <h3 class="text-lg font-semibold mb-2 transition-all hover:text-blue-600">رأي اللجنة</h3>
+                            <p class="card-content transition-all font-medium">${item["opinion "] || "غير محدد"}</p>
+                        </div>
+
+                        <div class="transition-all hover:bg-gray-50 p-3 rounded-lg">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2 transition-all hover:text-blue-600">ملاحظات / قرار تعديل</h3>
+                            <p class="text-gray-700 card-content transition-all">${item.committeeResolution || "غير محدد"}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+        const nameBannerHtml = `
+            <div class="name-banner">
+                <h2>${item.name || "غير محدد"}</h2>
+                <div class="subtitle">الرقم القومي: ${item.id || "غير محدد"}</div>
+            </div>
+        `;
+
+        resultsContainer.innerHTML = nameBannerHtml + cardHtml;
+      }
+
+      function displayMultipleResults(results) {
+        const resultsContainer = document.getElementById("results");
+
+        const formatAttachments = (attachments) => {
+          if (!attachments) return "لا توجد مرفقات";
+          return attachments.split("*").filter(it=>it && it.trim()).map(it=>it.trim()).join("\n• ");
+        };
+
+        const getOpinionBanner = (opinion) => {
+          if (!opinion) return { class: "banner-default", text: "لا يوجد رأي محدد" };
+          if (opinion.includes("عدم الموافقة")) return { class: "banner-danger", text: `❌ ${opinion}` };
+          if (opinion.includes("الموافقة") && !opinion.includes("عدم الموافقة")) return { class: "banner-success", text: `✅ ${opinion}` };
+          return { class: "banner-default", text: `📋 ${opinion}` };
+        };
+
+        const getOpinionClass = (opinion) => {
+          if (!opinion) return "opinion-default";
+          if (opinion.includes("عدم الموافقة")) return "opinion-unsuccess";
+          if (opinion.includes("الموافقة") && !opinion.includes("عدم الموافقة")) return "opinion-success";
+          return "opinion-default";
+        };
+
+        const hasApprovedRequest = results.some((item) => item["opinion "] && item["opinion "].includes("الموافقة") && !item["opinion "].includes("عدم الموافقة"));
+
+        let accordionHtml = `
+          <div class="name-banner">
+            <h2>${results[0].name || "غير محدد"}</h2>
+            <div class="subtitle">الرقم القومي: ${results[0].id || "غير محدد"}</div>
+          </div>
+
+          <div class="multiple-results-header">
+            <div class="text-lg">تم العثور على ${results.length} طلب للرقم القومي ${results[0].id}</div>
+            <div class="text-sm mt-1">اضغط على أي طلب لعرض التفاصيل</div>
+          </div>
+        `;
+
+        if (hasApprovedRequest) {
+          accordionHtml += `
+            <div class="approval-status-banner">
+              <div class="text-lg">✅ هناك طلب تمت الموافقة عليه</div>
+              <div class="text-sm mt-1 opacity-90">يمكنك مراجعة التفاصيل أدناه</div>
+            </div>
+          `;
+        }
+
+        results.forEach((item, index) => {
+          const bannerInfo = getOpinionBanner(item["opinion "]);
+          const accordionId = `accordion-${index}`;
+
+          accordionHtml += `
+            <div class="accordion-container">
+              <div class="accordion-header" onclick="toggleAccordion('${accordionId}')">
+                <div>
+                  <div class="font-bold">الطلب رقم ${index + 1}</div>
+                </div>
+                <div class="accordion-icon" id="icon-${accordionId}">▼</div>
+              </div>
+              <div class="accordion-content" id="${accordionId}">
+                <div class="p-6">
+                  <div class="opinion-banner ${bannerInfo.class}">
+                    <div class="text-lg font-bold">${bannerInfo.text}</div>
+                  </div>
+
+                  <div class="grid gap-4">
+                    <div class="border-b pb-4 transition-all hover:bg-gray-50 p-3 rounded-lg">
+                      <h3 class="text-lg font-semibold text-gray-800 mb-2 transition-all hover:text-blue-600">الادارة الحالية</h3>
+                      <p class="text-gray-700 card-content transition-all">${item.current || "غير محدد"}</p>
+                    </div>
+
+                    <div class="border-b pb-4 transition-all hover:bg-gray-50 p-3 rounded-lg">
+                      <h3 class="text-lg font-semibold text-gray-800 mb-2 transition-all hover:text-blue-600">الادارة المطلوبة</h3>
+                      <p class="text-gray-700 card-content transition-all">${item.requested || "غير محدد"}</p>
+                    </div>
+
+                    <div class="border-b pb-4 transition-all hover:bg-gray-50 p-3 rounded-lg">
+                      <h3 class="text-lg font-semibold text-gray-800 mb-2 transition-all hover:text-blue-600">المرفقات</h3>
+                      <p class="text-gray-700 card-content transition-all">• ${formatAttachments(item.attachments)}</p>
+                    </div>
+
+                    <div class="border-b pb-4 transition-all hover:bg-gray-50 p-3 rounded-lg ${getOpinionClass(item["opinion "])}">
+                      <h3 class="text-lg font-semibold mb-2 transition-all hover:text-blue-600">رأي اللجنة</h3>
+                      <p class="card-content transition-all font-medium">${item["opinion "] || "غير محدد"}</p>
+                    </div>
+
+                    <div class="transition-all hover:bg-gray-50 p-3 rounded-lg">
+                      <h3 class="text-lg font-semibold text-gray-800 mb-2 transition-all hover:text-blue-600">ملاحظات / قرار تعديل</h3>
+                      <p class="text-gray-700 card-content transition-all">${item.committeeResolution || "غير محدد"}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+
+        resultsContainer.innerHTML = accordionHtml;
+      }
+
+      function toggleAccordion(accordionId) {
+        const content = document.getElementById(accordionId);
+        const icon = document.getElementById(`icon-${accordionId}`);
+
+        if (content.classList.contains("active")) {
+          content.classList.remove("active");
+          icon.classList.remove("rotated");
+        } else {
+          document.querySelectorAll(".accordion-content.active").forEach((el) => { el.classList.remove("active"); });
+          document.querySelectorAll(".accordion-icon.rotated").forEach((el) => { el.classList.remove("rotated"); });
+
+          content.classList.add("active");
+          icon.classList.add("rotated");
+        }
+      }
+
+      function showError(message) {
+        const resultsContainer = document.getElementById("results");
+        resultsContainer.innerHTML = `
+                <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center alert-enter card-hover">
+                    <div class="text-red-600 font-medium text-lg transition-all">${message}</div>
+                </div>
+            `;
+      }
+
+      document.getElementById("nationalId").addEventListener("keypress", function (e) {
+        if (e.key === "Enter") searchData();
+      });
+    </script>
+  </body>
+</html>
